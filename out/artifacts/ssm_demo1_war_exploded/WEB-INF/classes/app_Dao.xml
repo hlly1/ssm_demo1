@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+<!-- 配置数据库信息 -->
+    <bean id="config" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:database.properties"/>
+    </bean>
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.drive}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!-- 创建mybatis的核心类sqlsessionfactory-->
+    <!-- 在springIOC容器中创建mybatis的核心类sqlsessionfactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 在这里引用数据源 -->
+        <property name="dataSource" ref="dataSource" />
+<!--        加载mybatis自身配置属性-->
+<!--        <property name="configLocation" value="" />-->
+        <!-- 映射文件 -->
+<!--        <property name="mapperLocations" value="classpath*:com/example/dao/*.xml"/>-->
+    </bean>
+
+<!--    mybatis映射文件扫描器配置-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.example.dao"/>
+    </bean>
+</beans>
